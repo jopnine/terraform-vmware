@@ -8,6 +8,22 @@ Here i will teach how to setup a whole enviroment using VMware, Terraform and An
 
 
 
+## Laboratory Enviroment
+
+This is the enviroment we used in this example.
+
+Brand: Dell Inc.
+
+Model: PowerEdge R430
+
+Specs: 6 CPUs x Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz
+
+ESXi-7.0U3d-19482537-standard (VMware, Inc.) 
+
+* *If  you are using any dell hardware, you should try use a customized ESXi iso for it*
+
+[How to download and install DELL EMC custom ESXi](https://www.dell.com/support/kbdoc/pt-br/000176963/dell-emc-customized-image-of-vmware-esxi-availability-and-download-instructions)
+
 ## References
 
 In this project we will be using the following links:
