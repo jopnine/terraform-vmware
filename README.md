@@ -16,7 +16,13 @@ Brand: Dell Inc.
 
 Model: PowerEdge R430
 
-Specs: 6 CPUs x Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz
+Specs: 
+
+*   **CPU**	6 CPUs x Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz
+
+*   **Memory**	16 GB
+
+*   **Storage** 512 GB 
 
 ESXi-7.0U3d-19482537-standard (VMware, Inc.) 
 
