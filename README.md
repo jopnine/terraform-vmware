@@ -71,17 +71,45 @@ provider "vsphere" {
 | `password`      | `string` | **Required**. The user password for vSphere API operations. |
 | `allow_unverified_ssl`      | `bool` | **Required**. If set, VMware vSphere client will permit unverifiable SSL certificates. |
 
-Is suggested to use it with vars like:
+Is suggested to use it with variables like:
 
 ```hcl
 provider "vsphere" {
+  vsphere_server       = var.vsphere_server
   user                 = var.vsphere_user
   password             = var.vsphere_password
-  vsphere_server       = var.vsphere_server
   allow_unverified_ssl = true
 }
 ```
-Then create another file named "vars.tf"
+If you are using variables create another file named "vars.tf" and paste the code below:
+
+```hcl
+variable "vsphere_server" {
+  description = "The vSphere Server name for vSphere API operations."
+}
+
+variable "vsphere_user" {
+  description = "The user name for vSphere API operations."
+}
+
+variable "vsphere_password" {
+  description = "The user password for vSphere API operations."
+}
+
+```
+
+This way you will be prompted to fill this on run, in case you don't want to be asked
+ everytime you run ``terraform apply`` , you can avoid this by using a static value on the provider
+, creating a .tfvars file, or simply by setting up a default value Ex.
+
+```hcl
+variable "vsphere_server" {
+  default     = "esxi-node01.lab"
+  description = "The vSphere Server name for vSphere API operations."
+}
+
+```
+
 
 
 
