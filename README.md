@@ -37,9 +37,51 @@ In this project we will be using the following links:
 [vmware](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs)
 
 [GuestOS Var list](https://github.com/jopnine/terraform-vmware/blob/main/guestOS)
-## Initial steps
+# Initial steps
 
 Assuming that you will have a brand new vSphere Hypervisor (**ESXI HOST**) without anything configured,
 first we need to setup and assign **Port groups**, **vSwitch** and **Physical NICS**. You can do
 that by yourself using the UI interface or using the instructions below, in case you already have a 
 enviroment "Ready-To-Work" you can skip this step.
+
+
+
+### 01 - Network
+
+For the first steps you might want to setup all the VLANs,Virtual Switches,Port Group etc,
+and for this we first need to setup our provider. 
+
+Create a file named 'provider.tf' and paste the code below.
+
+
+```hcl
+provider "vsphere" {
+  # Configuration options
+  vsphere_server       = "esxi01.lab"
+  user                 = "YOURUSERNAMEHERE"
+  password             = "YOURPASSWORDHERE"
+  allow_unverified_ssl = true
+}
+
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `vsphere_server`      | `string` | **Required**. The vSphere Server name for vSphere API operations. |
+| `user`      | `string` | **Required**. The user name for vSphere API operations. |
+| `password`      | `string` | **Required**. The user password for vSphere API operations. |
+| `allow_unverified_ssl`      | `bool` | **Required**. If set, VMware vSphere client will permit unverifiable SSL certificates. |
+
+Is suggested to use it with vars like:
+
+```hcl
+provider "vsphere" {
+  user                 = var.vsphere_user
+  password             = var.vsphere_password
+  vsphere_server       = var.vsphere_server
+  allow_unverified_ssl = true
+}
+```
+Then create another file named "vars.tf"
+
+
+
