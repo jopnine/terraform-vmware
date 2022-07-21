@@ -46,12 +46,7 @@ enviroment "Ready-To-Work" you can skip this step.
 
 
 
-### 01 - Network
-
-For the first steps you might want to setup all the VLANs,Virtual Switches,Port Group etc,
-and for this we first need to setup our provider. 
-
-Create a file named 'provider.tf' and paste the code below.
+### 01 - VMware Provider
 
 
 ```hcl
@@ -113,3 +108,7 @@ variable "vsphere_server" {
 
 
 
+### 01 - Network
+
+For the first steps you might want to setup all the VLANs,Virtual Switches,Port Group etc,
+and for this we first need to setup our provider. 
