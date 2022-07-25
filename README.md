@@ -172,5 +172,27 @@ variable "adapter_standby" {
  and you will have a output like this:*
  ![logo](https://github.com/jopnine/terraform-vmware/blob/main/nic.png?raw=true)
 
+We also need to include the following fields in order to ``host_system_id`` get a valid value.
+```hcl
+data "vsphere_datacenter" "datacenter" {
+  name = "dc-01"
+}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name`      | `string` | **Optional**. The name of the datacenter. This can be a name or path. Can be omitted if there is only one datacenter in your inventory. |
+
+```hcl
+data "vsphere_host" "host" {
+  name          = "esxi01.lab"
+  datacenter_id = data.vsphere_datacenter.datacenter.id
+}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name`      | `string` | **Optional**. The name of the host. This can be a name or path. If not provided, the default host is used. |
+| `name`      | `string` | **Required**. The managed object ID of the datacenter to look for the host in. |
+
 
 
