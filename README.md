@@ -4,7 +4,9 @@
 
 # How to setup a infrascruture using Terraform, VMware and Ansible (WIP)
 
-Here i will teach how to setup a whole enviroment using VMware, Terraform and Ansible.
+Here i will teach how to setup a whole enviroment using VMware, Terraform and Ansible. 
+
+
 
 
 
@@ -175,12 +177,13 @@ variable "adapter_standby" {
 We also need to include the following fields in order to ``host_system_id`` get a valid value.
 ```hcl
 data "vsphere_datacenter" "datacenter" {
-  name = "dc-01"
+  name = var.data_center
 }
 ```
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `name`      | `string` | **Optional**. The name of the datacenter. This can be a name or path. Can be omitted if there is only one datacenter in your inventory. |
+
 
 ```hcl
 data "vsphere_host" "host" {
@@ -193,6 +196,16 @@ data "vsphere_host" "host" {
 | :-------- | :------- | :-------------------------------- |
 | `name`      | `string` | **Optional**. The name of the host. This can be a name or path. If not provided, the default host is used. |
 | `name`      | `string` | **Required**. The managed object ID of the datacenter to look for the host in. |
+
+
+Also we need to include the variable ``data_center`` in our ``vars.tf`` file.
+
+```hcl
+variable "data_center" {
+  default = "dc-01"
+}
+```
+
 
 
 Now we need to create portgroups and assign in the resource we created above. In order to create
@@ -315,3 +328,70 @@ privilege should be provided as category.subcategory.privilege.
 Keep the role_privileges sorted alphabetically for a better user experience.
 
 In case you want to create multiple roles, you should use the field **for_each** . 
+## 04 - Administration
+
+Now lets Provides a VMware vSphere license resource. This can be used to add and remove license keys.
+
+```hcl
+resource "vsphere_license" "licenseKey" {
+  license_key = "452CQ-2EK54-K8742-00000-00000"
+}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `license_key`      | `string` | **Required** The license key to add. |
+| `labels`      | `map of string` | **Optional**. A map of key/value pairs to be attached as labels (tags) to the license key. |
+
+## 05 - Deploying VMs
+
+Now to deploy the virtual machines, we need to include this resource.
+
+
+```hcl
+resource "vsphere_virtual_machine" "virtualmachine" {
+  count                      = var.vm_count
+  name                       = "${var.name_new_vm}-${count.index + 1}"
+  resource_pool_id           = data.vsphere_resource_pool.pool.id
+  datastore_id               = data.vsphere_datastore.datastore.id
+  force_power_off            = true
+  shutdown_wait_timeout      = 1
+  num_cpus                   = var.num_cpus
+  memory                     = var.num_mem
+  wait_for_guest_net_timeout = 0
+  guest_id                   = var.guest_id
+  nested_hv_enabled          = true
+  
+  network_interface {
+    network_id   = data.vsphere_network.networking.id
+    adapter_type = var.net_adapter_type
+  }
+  
+  cdrom {
+    datastore_id = data.vsphere_datastore.datastore.id
+    path         = var.custom_iso_path
+  }
+  disk {
+    size             = var.disk_size
+    label            = "first-disk.vmdk"
+    eagerly_scrub    = false
+    thin_provisioned = true
+  }
+}
+```
+
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `count`      | `number` | **Optional**. Number of instances of this resource, e.g. 3 |
+| `name`      | `string` | **Required**. The name of this virtual machine. |
+| `resource_pool_id`      | `string` | **Required**. The ID of a resource pool to put the virtual machine in. |
+| `datastore_id`      | `string` | **Optional**. The ID of the virtual machine's datastore. The virtual machine configuration is placed here, along with any virtual disks that are created without datastores. |
+| `force_power_off`      | `bool` | **Optional**. Set to true to force power-off a virtual machine if a graceful guest shutdown failed for a necessary operation. |
+| `shutdown_wait_timeout`      | `number` | **Optional**. The amount of time, in minutes, to wait for shutdown when making necessary updates to the virtual machine. |
+| `num_cpus`      | `number` | **Optional**. The number of virtual processors to assign to this virtual machine. |
+| `memory`      | `number` | **Optional**. The size of the virtual machine's memory, in MB |
+| `wait_for_guest_net_timeout`      | `number` | **Optional**. The amount of time, in minutes, to wait for an available IP address on this virtual machine. A value less than 1 disables the waiter. |
+| `guest_id`      | `string` | **Optional**. The guest ID for the operating system. |
+| `nested_hv_enabled`      | `bool` | **Optional**. Enable nested hardware virtualization on this virtual machine, facilitating nested virtualization in the guest. |
+| `guest_id`      | `string` | **Optional**. The guest ID for the operating system. |
