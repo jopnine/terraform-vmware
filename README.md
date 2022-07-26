@@ -349,6 +349,15 @@ Now to deploy the virtual machines, we need to include this resource.
 
 
 ```hcl
+data "vsphere_network" "networking" {
+  name          = var.server_vlan
+  datacenter_id = data.vsphere_datacenter.datacenter.id
+  depends_on = [vsphere_host_port_group.pg]
+}
+
+data "vsphere_resource_pool" "pool" {
+}
+
 resource "vsphere_virtual_machine" "virtualmachine" {
   count                      = var.vm_count
   name                       = "${var.name_new_vm}-${count.index + 1}"
@@ -394,4 +403,63 @@ resource "vsphere_virtual_machine" "virtualmachine" {
 | `wait_for_guest_net_timeout`      | `number` | **Optional**. The amount of time, in minutes, to wait for an available IP address on this virtual machine. A value less than 1 disables the waiter. |
 | `guest_id`      | `string` | **Optional**. The guest ID for the operating system. |
 | `nested_hv_enabled`      | `bool` | **Optional**. Enable nested hardware virtualization on this virtual machine, facilitating nested virtualization in the guest. |
-| `guest_id`      | `string` | **Optional**. The guest ID for the operating system. |
+| `network_interface`      | `list` | **Required**. A specification for a virtual NIC on this virtual machine. |
+| `network_id`      | `string` | **Required**. The ID of the network to connect this network interface to. |
+| `adapter_type`      | `string` | **Optional**. The controller type. Can be one of e1000, e1000e, or vmxnet3. |
+| `cdrom`      | `list` | **Optional**. A specification for a CDROM device on this virtual machine. |
+| `disk`      | `list` | **Required**. A specification for a virtual disk device on this virtual machine. |
+
+*Note that we have added the parameter ``depends_on = [vsphere_host_port_group.pg]`` so we can avoid terraform not finding our port group while trying to create VMs.*
+
+As for the variables, in ``vars.tf`` we will add the following code:
+
+```hcl
+
+variable "data_store" {
+  default = "ds-01"
+}
+
+variable "server_vlan" {
+  default = "pg-03"
+}
+
+variable "net_adapter_type" {
+  default = "vmxnet3"
+}
+
+variable "guest_id" {
+  default = "centos7_64Guest"
+}
+
+variable "custom_iso_path" {
+  default = "iso/centos7-custom-img-disk50gb-v0.0.3.iso"
+}
+
+variable "name_new_vm" {
+  description = "Input a name for Virtual Machine Ex. new_vm"
+}
+
+variable "vm_count" {
+  description = "Number of instaces"
+}
+
+variable "disk_size" {
+  description = "Amount of Disk, Ex. 50, 60, 70 OBS: The amount may not be less than 50"
+}
+
+variable "num_cpus" {
+  description = "Amount of vCPU's, Ex. 2"
+}
+
+variable "num_mem" {
+  description = "Amount of Memory, Ex. 1024, 2048, 3073, 4096"
+}
+```
+
+*You can found a list with all possible values for the variable "guest_id" [here](https://github.com/jopnine/terraform-vmware/blob/main/guestOS)*
+
+Now you can run ``terraform apply`` and will be prompted to set a value for the variables without a default
+value.
+
+![Input](https://github.com/jopnine/terraform-vmware/blob/main/input.png?raw=true)
+
