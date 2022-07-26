@@ -34,7 +34,7 @@ ESXi-7.0U3d-19482537-standard (VMware, Inc.)
 
 In this project we will be using the following links:
 
-[vmware](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs)
+[Hashicorp VMware](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs)
 
 [GuestOS Var list](https://github.com/jopnine/terraform-vmware/blob/main/guestOS)
 # Initial steps
