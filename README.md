@@ -110,7 +110,7 @@ and use it. In the same folder you created the previous files you should now cre
 file with any name you want it. (Terraform will read all files in the folder with the sufix .tf)
 
 
-### 01 - Network
+### 02 - Network
 
 For the first steps you might want to setup all the VLANs,Virtual Switches,Port Group etc,
 and for this we first need to setup our provider. 
@@ -281,3 +281,37 @@ variable "pg_cfg" {
 *You can also create a file named ``terraform.tfvars`` and override the variables.*
 
 
+## 03 - Security
+
+When it comes to Security, how we handle roles and permissions is critical.
+I suggest taking a look at VMware [Best Pratices](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.security.doc/GUID-FAA074CC-E8C9-4F13-ABCF-6CF7F15F04EE.html)
+
+Now in ``instance.tf`` , let's create a default role for operators that need to have some access to alarms
+and view some system info.
+
+
+
+
+```hcl
+resource vsphere_role "role_operator" {
+  name = "Operator"
+  role_privileges = ["Alarm.Acknowledge", "Alarm.Create", "System.Read", "System.View"]
+}
+```
+
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name`      | `string` | **Required**. Name of the role policy. |
+| `name`      | `list of string` | **Optional**. Name of the role policy. |
+
+This code above creates a role with name role_operator and privileges create, 
+acknowledge for Alarm and create, read and view for System. While providing role_privileges, 
+the id of the privilege has to be provided. The format of the privilege id is privilege 
+name preceded by its categories joined by a ``.`` 
+
+For example a privilege with path category->subcategory->
+privilege should be provided as category.subcategory.privilege. 
+Keep the role_privileges sorted alphabetically for a better user experience.
+
+In case you want to create multiple roles, you should use the field **for_each** . 
