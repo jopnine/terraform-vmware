@@ -619,8 +619,97 @@ The SSH public key we generated before is now copied to the host (**labVM-2**)
 ![ssh copied](https://github.com/jopnine/terraform-vmware/blob/main/image14.png?raw=true)
 
 Now we should be able to SSH into the host **labVM-2** without any password and run sudo commands without being prompted
-for any password.
+for any password. In order to improve security, let's connect again on our host **labVM-2** and run the following code in order to
+disable password-based login for the **ansible** user:
 
+```console
+$ sudo usermod -L ansible
+```
 
+Next, back on our virtual machine where we had installed ansible (**labVM-1**), Let's create a new
+directory **~/workspace/** using the following code:
 
+```console
+$ mkdir ~/workspace
+```
+Navigate to the **~/workspace/** directory using the following code:
+
+```console
+cd ~/workspace/
+```
+
+Create a new **hosts** file using the following code:
+
+```console
+$ nano hosts
+```
+
+Next, list the IP/DNS of the hosts (In our case, **labVM-2** & **labVM-3**) in the hosts file:
+
+```yml
+## set up ssh user name and path to python3 ##
+[all:vars]
+ansible_user='ubuntu'
+ansible_become=yes
+ansible_become_method=sudo
+ansible_python_interpreter='/usr/bin/env python3'
+ 
+##########################
+## The hosts that you wish this playbook to be applied.
+###########################
+[servers]
+10.200.0.106
+10.200.0.108
+```
+![hosts](https://github.com/jopnine/terraform-vmware/blob/main/image15.png?raw=true)
+
+And save the file by pressing **CTRL + X** followed by Y and the press **Enter**, Then create a new **update.yml** file using the following code:
+
+```console
+$ nano update.yml
+```
+
+```yml
+---
+- hosts: servers
+  become: true
+  become_user: root
+  tasks:
+    - name: Update apt repo and cache on all Debian/Ubuntu boxes
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+    - name: Upgrade all packages on servers
+      apt: upgrade=dist force_apt_get=yes
+
+    - name: Check if a reboot is needed on all servers
+      register: reboot_required_file
+      stat: path=/var/run/reboot-required get_md5=no
+
+    - name: Reboot the box if kernel updated
+      reboot:
+        msg: "Reboot initiated by Ansible for kernel updates"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: reboot_required_file.stat.exists
+```
+Save the file by pressing **CTRL + X** followed by Y and the press **Enter**, then execute the following code to test the hosts connections:
+
+```console
+$ ansible -i ./hosts all -u ansible -m ping
+```
+
+![hosts](https://github.com/jopnine/terraform-vmware/blob/main/image16.png?raw=true)
+
+All hosts must respond with **SUCCESS** if not. Check previous steps. 
+If all hosts respond with **SUCCESS** we will run the "playbook" we created above with the following command:
+
+```console
+$ ansible-playbook -i hosts update.yml
+```
+![update.yml](https://github.com/jopnine/terraform-vmware/blob/main/image17.png?raw=true)
+
+Finally, we've made and run a "Playbook" that updates all packages and restarts the host if necessary.
 
