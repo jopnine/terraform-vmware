@@ -1,5 +1,5 @@
 
-![logo](https://raw.githubusercontent.com/jopnine/terraform-vmware/main/image.png)
+![logo](https://raw.githubusercontent.com/jopnine/terraform-vmware/main/images/image.png)
 
 
 # How to setup a infrascruture using Terraform, VMware and Ansible (WIP)
@@ -172,7 +172,7 @@ variable "adapter_standby" {
 
  *In case you don't know what NICs you have, access your ESXI through CLI and run the command ``esxcli network nic list``
  and you will have a output like this:*
- ![logo](https://github.com/jopnine/terraform-vmware/blob/main/nic.png?raw=true)
+ ![logo](https://github.com/jopnine/terraform-vmware/blob/main/images/nic.png?raw=true)
 
 We also need to include the following fields in order to ``host_system_id`` get a valid value.
 ```hcl
@@ -603,7 +603,7 @@ running the following command.
 ```console
 $ ip addr
 ```
-![ip address](https://github.com/jopnine/terraform-vmware/blob/main/image13.png?raw=true)
+![ip address](https://github.com/jopnine/terraform-vmware/blob/main/images/image13.png?raw=true)
 
 Now we've made sure the host have a user and SSH service for ansible to access, let's proceed
 with the magic, in our virtual machine where we installed Ansible (**labVM-1**), copy the SSH public key
@@ -616,7 +616,7 @@ When prompted ``Are you sure you want to continue connecting (Yes/no[fingerprint
 Next, type in the password for the user ``ansible`` that we created above and press **Enter**.
 The SSH public key we generated before is now copied to the host (**labVM-2**)
 
-![ssh copied](https://github.com/jopnine/terraform-vmware/blob/main/image14.png?raw=true)
+![ssh copied](https://github.com/jopnine/terraform-vmware/blob/main/images/image14.png?raw=true)
 
 Now we should be able to SSH into the host **labVM-2** without any password and run sudo commands without being prompted
 for any password. In order to improve security, let's connect again on our host **labVM-2** and run the following code in order to
@@ -661,7 +661,7 @@ ansible_python_interpreter='/usr/bin/env python3'
 10.200.0.106
 10.200.0.108
 ```
-![hosts](https://github.com/jopnine/terraform-vmware/blob/main/image15.png?raw=true)
+![hosts](https://github.com/jopnine/terraform-vmware/blob/main/images/image15.png?raw=true)
 
 And save the file by pressing **CTRL + X** followed by Y and the press **Enter**, Then create a new **update.yml** file using the following code:
 
@@ -701,7 +701,7 @@ Save the file by pressing **CTRL + X** followed by Y and the press **Enter**, th
 $ ansible -i ./hosts all -u ansible -m ping
 ```
 
-![hosts](https://github.com/jopnine/terraform-vmware/blob/main/image16.png?raw=true)
+![hosts](https://github.com/jopnine/terraform-vmware/blob/main/images/image16.png?raw=true)
 
 All hosts must respond with **SUCCESS** if not. Check previous steps. 
 If all hosts respond with **SUCCESS** we will run the "playbook" we created above with the following command:
@@ -709,7 +709,7 @@ If all hosts respond with **SUCCESS** we will run the "playbook" we created abov
 ```console
 $ ansible-playbook -i hosts update.yml
 ```
-![update.yml](https://github.com/jopnine/terraform-vmware/blob/main/image17.png?raw=true)
+![update.yml](https://github.com/jopnine/terraform-vmware/blob/main/images/image17.png?raw=true)
 
 Finally, we've made and run a "Playbook" that updates all packages and restarts the host if necessary.
 
