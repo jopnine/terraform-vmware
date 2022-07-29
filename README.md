@@ -463,3 +463,7 @@ value.
 
 ![Input](https://github.com/jopnine/terraform-vmware/blob/main/input.png?raw=true)
 
+
+## 06 - Ansible
+
+![enviroment](https://github.com/jopnine/terraform-vmware/blob/main/example.png?raw=true)
