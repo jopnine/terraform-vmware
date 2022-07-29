@@ -34,11 +34,11 @@ ESXi-7.0U3d-19482537-standard (VMware, Inc.)
 
 ## References
 
-In this project we will be using the following links:
-
 [Hashicorp VMware](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs)
 
 [GuestOS Var list](https://github.com/jopnine/terraform-vmware/blob/main/guestOS)
+
+[Linux Hint](https://linuxhint.com/)
 # Initial steps
 
 Assuming that you will have a brand new vSphere Hypervisor (**ESXI HOST**) without anything configured,
