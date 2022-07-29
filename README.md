@@ -464,7 +464,7 @@ value.
 ![Apply](https://github.com/jopnine/terraform-vmware/blob/main/apply.png?raw=true)
 
 
-## 06 - Ansible
+## 06 - Installing Ansible
 
 In the previous steps, we configured our environment using terraform to deploy three virtual machines. 
 We decided to call them "labVM-1" , "labVM-2" and "labVM-3" they all have "Debian 11".
@@ -483,4 +483,144 @@ Now let's check if python is installed.
 ```console
 $ python3 -V
 ```
-![apt update](https://github.com/jopnine/terraform-vmware/blob/main/image03.png?raw=true)
+or 
+```console
+$ python -V
+```
+![python](https://github.com/jopnine/terraform-vmware/blob/main/image03.png?raw=true)
+
+*Most linux distros come with python already installed*
+
+If you don't have **Python** installed, don't worry because the following command already downloads and installs 
+Ansible as well as its dependencies. Eg: "Python pip"
+
+```console
+$ sudo apt install ansible
+```
+
+![confirm](https://github.com/jopnine/terraform-vmware/blob/main/image04.png?raw=true)
+
+Confirm the installation by pressing Y and then Enter.
+
+To verify if Ansible is installed and working, run the command below:
+
+```console
+$ ansible --version
+```
+![ansible version](https://github.com/jopnine/terraform-vmware/blob/main/image05.png?raw=true)
+
+Continuing where we left off, we will now generate an SSH key so that our virtual machine "labVM-1" can connect to the other virtual machines without need to input a password.
+Run the following command.
+
+```console
+$ ssh-keygen
+```
+![keygen](https://github.com/jopnine/terraform-vmware/blob/main/image06.png?raw=true)
+
+Then press **Enter**.
+
+![keygen](https://github.com/jopnine/terraform-vmware/blob/main/image07.png?raw=true)
+
+Press **Enter** again.
+
+![keygen](https://github.com/jopnine/terraform-vmware/blob/main/image08.png?raw=true)
+
+Now your SSH key is generated.
+
+![keygen](https://github.com/jopnine/terraform-vmware/blob/main/image09.png?raw=true)
+
+## 07 - Configuring Hosts
+
+Okay, now we've finished installing "Ansible" and we're ready to start configuring hosts to it.
+
+The following steps:
+
+* Check if the APT package repository cache is updated with the following command:
+
+```console
+$ sudo apt update
+```
+
+Now you need to check if you have the package OpenSSH installed, running and enabled. 
+This is crucial because Ansible uses SSH to access the host. You can check it by running
+
+```console
+$ sudo systemctl status sshd
+```
+
+![ssh](https://github.com/jopnine/terraform-vmware/blob/main/image10.png?raw=true)
+
+*You can see in the image above the service is **ACTIVE** and **ENABLED**.*
+
+In case you don't have it installed, run the following command:
+
+```console
+$ sudo apt install openssh-server -y
+```
+
+Then start the **sshd** service manually by using the following command:
+
+```console
+$ sudo systemctl start sshd
+```
+
+Now you need to enable it (add it to the system startup), in order to do it, run the following command:
+
+```console
+$ sudo systemctl enable sshd
+```
+Run again the command ``
+$ sudo systemctl status sshd
+`` to verify if the service is **ACTIVE** and **ENABLED**. 
+Then let's create a user for **Ansible** with sudo access and auth through the SSH key we generated earlier. In order to do so, run the following command.
+
+```console
+$ sudo adduser --shell /bin/bash --gecos "" ansible
+```
+
+Type in a password press **Enter**.
+
+Retype the password and press **Enter** again.
+
+![ansible user](https://github.com/jopnine/terraform-vmware/blob/main/image11.png?raw=true)
+
+In order to authorize the authentication through certificate in the **ansible** user, edit the file
+**/etc/sudoers** with the following command:
+
+```console
+$ sudo visudo
+```
+
+Then add the line:
+```console
+ansible ALL=(ALL) NOPASSWD:ALL
+```
+![sudoers file](https://github.com/jopnine/terraform-vmware/blob/main/image12.png?raw=true)
+
+And save the file by pressing **CTRL + X** followed by Y and the press **Enter**. Now find the IP address of the host by
+running the following command.
+
+```console
+$ ip addr
+```
+![ip address](https://github.com/jopnine/terraform-vmware/blob/main/image13.png?raw=true)
+
+Now we've made sure the host have a user and SSH service for ansible to access, let's proceed
+with the magic, in our virtual machine where we installed Ansible (**labVM-1**), copy the SSH public key
+to the Ansible host (**labVM-2**) with the following command:
+
+```console
+$ ssh-copy-id ansible@10.200.0.106
+```
+When prompted ``Are you sure you want to continue connecting (Yes/no[fingerprint])?`` Type in **yes** and press **Enter**.
+Next, type in the password for the user ``ansible`` that we created above and press **Enter**.
+The SSH public key we generated before is now copied to the host (**labVM-2**)
+
+![ssh copied](https://github.com/jopnine/terraform-vmware/blob/main/image14.png?raw=true)
+
+Now we should be able to SSH into the host **labVM-2** without any password and run sudo commands without being prompted
+for any password.
+
+
+
+
