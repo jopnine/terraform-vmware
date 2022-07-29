@@ -2,7 +2,7 @@
 ![logo](https://raw.githubusercontent.com/jopnine/terraform-vmware/main/images/image.png)
 
 
-# How to setup a infrascruture using Terraform, VMware and Ansible (WIP)
+# How to setup a infrascruture using Terraform, VMware and Ansible
 
 Here i will teach how to setup a whole enviroment using VMware, Terraform and Ansible. 
 
