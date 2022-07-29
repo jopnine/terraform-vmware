@@ -466,8 +466,21 @@ value.
 
 ## 06 - Ansible
 
-In the previous steps, we configured our environment using terraform to deploy two virtual machines. 
-We decided to call they "labansible-1" & "labansible-2" both using "Debian 11". 
+In the previous steps, we configured our environment using terraform to deploy three virtual machines. 
+We decided to call them "labVM-1" , "labVM-2" and "labVM-3" they all have "Debian 11".
 
+To begin, let's install ansible on **labVM-1**.
 
-![enviroment](https://github.com/jopnine/terraform-vmware/blob/main/example.png?raw=true)
+Start by updating the APT package repository cache:
+
+```console
+$ sudo apt update
+```
+![apt update](https://github.com/jopnine/terraform-vmware/blob/main/image02.png?raw=true)
+
+Now let's check if python is installed.
+
+```console
+$ python3 -V
+```
+![apt update](https://github.com/jopnine/terraform-vmware/blob/main/image03.png?raw=true)
