@@ -461,7 +461,7 @@ variable "num_mem" {
 Now you can run ``terraform apply`` and will be prompted to set a value for the variables without a default
 value.
 
-![Apply](https://github.com/jopnine/terraform-vmware/blob/main/apply.png?raw=true)
+![Apply](https://github.com/jopnine/terraform-vmware/blob/main/images/apply.png?raw=true)
 
 
 ## 06 - Installing Ansible
@@ -476,7 +476,7 @@ Start by updating the APT package repository cache:
 ```console
 $ sudo apt update
 ```
-![apt update](https://github.com/jopnine/terraform-vmware/blob/main/image02.png?raw=true)
+![apt update](https://github.com/jopnine/terraform-vmware/blob/main/images/image02.png?raw=true)
 
 Now let's check if python is installed.
 
@@ -487,7 +487,7 @@ or
 ```console
 $ python -V
 ```
-![python](https://github.com/jopnine/terraform-vmware/blob/main/image03.png?raw=true)
+![python](https://github.com/jopnine/terraform-vmware/blob/main/images/image03.png?raw=true)
 
 *Most linux distros come with python already installed*
 
@@ -498,7 +498,7 @@ Ansible as well as its dependencies. Eg: "Python pip"
 $ sudo apt install ansible
 ```
 
-![confirm](https://github.com/jopnine/terraform-vmware/blob/main/image04.png?raw=true)
+![confirm](https://github.com/jopnine/terraform-vmware/blob/main/images/image04.png?raw=true)
 
 Confirm the installation by pressing Y and then Enter.
 
@@ -507,7 +507,7 @@ To verify if Ansible is installed and working, run the command below:
 ```console
 $ ansible --version
 ```
-![ansible version](https://github.com/jopnine/terraform-vmware/blob/main/image05.png?raw=true)
+![ansible version](https://github.com/jopnine/terraform-vmware/blob/main/images/image05.png?raw=true)
 
 Continuing where we left off, we will now generate an SSH key so that our virtual machine "labVM-1" can connect to the other virtual machines without need to input a password.
 Run the following command.
@@ -515,19 +515,19 @@ Run the following command.
 ```console
 $ ssh-keygen
 ```
-![keygen](https://github.com/jopnine/terraform-vmware/blob/main/image06.png?raw=true)
+![keygen](https://github.com/jopnine/terraform-vmware/blob/main/images/image06.png?raw=true)
 
 Then press **Enter**.
 
-![keygen](https://github.com/jopnine/terraform-vmware/blob/main/image07.png?raw=true)
+![keygen](https://github.com/jopnine/terraform-vmware/blob/main/images/image07.png?raw=true)
 
 Press **Enter** again.
 
-![keygen](https://github.com/jopnine/terraform-vmware/blob/main/image08.png?raw=true)
+![keygen](https://github.com/jopnine/terraform-vmware/blob/main/images/image08.png?raw=true)
 
 Now your SSH key is generated.
 
-![keygen](https://github.com/jopnine/terraform-vmware/blob/main/image09.png?raw=true)
+![keygen](https://github.com/jopnine/terraform-vmware/blob/main/images/image09.png?raw=true)
 
 ## 07 - Configuring Hosts
 
@@ -548,7 +548,7 @@ This is crucial because Ansible uses SSH to access the host. You can check it by
 $ sudo systemctl status sshd
 ```
 
-![ssh](https://github.com/jopnine/terraform-vmware/blob/main/image10.png?raw=true)
+![ssh](https://github.com/jopnine/terraform-vmware/blob/main/images/image10.png?raw=true)
 
 *You can see in the image above the service is **ACTIVE** and **ENABLED**.*
 
@@ -582,7 +582,7 @@ Type in a password press **Enter**.
 
 Retype the password and press **Enter** again.
 
-![ansible user](https://github.com/jopnine/terraform-vmware/blob/main/image11.png?raw=true)
+![ansible user](https://github.com/jopnine/terraform-vmware/blob/main/images/image11.png?raw=true)
 
 In order to authorize the authentication through certificate in the **ansible** user, edit the file
 **/etc/sudoers** with the following command:
@@ -595,7 +595,7 @@ Then add the line:
 ```console
 ansible ALL=(ALL) NOPASSWD:ALL
 ```
-![sudoers file](https://github.com/jopnine/terraform-vmware/blob/main/image12.png?raw=true)
+![sudoers file](https://github.com/jopnine/terraform-vmware/blob/main/images/image12.png?raw=true)
 
 And save the file by pressing **CTRL + X** followed by Y and the press **Enter**. Now find the IP address of the host by
 running the following command.
