@@ -36,11 +36,7 @@ resource vsphere_role "role_operator" {
   name = "Operator"
   role_privileges = ["Alarm.Acknowledge", "Alarm.Create", "System.Read", "System.View"]
 }
-/*
-resource "vsphere_license" "licenseKey" {
-  license_key = "5H6C0-8CHD2-182G9-0V2H0-95UHJ"
-}
-*/
+
 data "vsphere_network" "networking" {
   name          = var.server_vlan
   datacenter_id = data.vsphere_datacenter.datacenter.id

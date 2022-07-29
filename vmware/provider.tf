@@ -1,7 +1,8 @@
 provider "vsphere" {
   # Configuration options
-  vsphere_server       = "10.200.0.11"
-  user                 = "root"
-  password             = "Coelho123@"
+  vsphere_server       = "esxi01.lab"
+  user                 = "YOURUSERNAMEHERE"
+  password             = "YOURPASSWORDHERE"
   allow_unverified_ssl = true
 }
+
