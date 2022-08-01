@@ -172,7 +172,7 @@ variable "adapter_standby" {
 
  *In case you don't know what NICs you have, access your ESXI through CLI and run the command ``esxcli network nic list``
  and you will have a output like this:*
- ![logo](https://github.com/jopnine/terraform-vmware/blob/main/images/nic.png?raw=true)
+ ![nic](https://github.com/jopnine/terraform-vmware/blob/main/images/nic.png?raw=true)
 
 We also need to include the following fields in order to ``host_system_id`` get a valid value.
 ```hcl
