@@ -649,7 +649,7 @@ Next, list the IP/DNS of the hosts (In our case, **labVM-2** & **labVM-3**) in t
 ```yml
 ## set up ssh user name and path to python3 ##
 [all:vars]
-ansible_user='ubuntu'
+ansible_user='ansible'
 ansible_become=yes
 ansible_become_method=sudo
 ansible_python_interpreter='/usr/bin/env python3'
