@@ -111,6 +111,20 @@ after setup the provider, we must declare which provider to use , so that Terraf
 and use it. In the same folder you created the previous files you should now create another
 file with any name you want it. (Terraform will read all files in the folder with the sufix .tf)
 
+Create another file called ``main.tf`` and paste the following below.
+
+```hcl
+terraform {
+  required_providers {
+    vsphere = {
+      source = "hashicorp/vsphere"
+      version = "2.2.0"
+    }
+  }
+  required_version = ">= 1.2.0"
+}
+```
+
 
 ### 02 - Network
 
