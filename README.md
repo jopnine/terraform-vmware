@@ -50,6 +50,7 @@ enviroment "Ready-To-Work" you can skip this step.
 
 ### 01 - VMware Provider
 
+Let's start by creating a file called ``provider.tf```and paste the following code.
 
 ```hcl
 provider "vsphere" {
